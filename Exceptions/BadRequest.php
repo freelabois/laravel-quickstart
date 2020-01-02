@@ -1,7 +1,7 @@
 <?php
 
 
-namespace  Freelabois\LaravelQuickstart\Exceptions;
+namespace Freelabois\LaravelQuickstart\Exceptions;
 
 
 use Exception;

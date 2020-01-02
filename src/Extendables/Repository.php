@@ -1,9 +1,9 @@
 <?php
 
 
-namespace  Freelabois\LaravelQuickstart\Extendables;
+namespace Freelabois\LaravelQuickstart\Extendables;
 
-use  Freelabois\LaravelQuickstart\Interfaces\RepositoryInterface;
+use Freelabois\LaravelQuickstart\Interfaces\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Builder;
@@ -81,7 +81,7 @@ class Repository implements RepositoryInterface
      */
     public function injectFiltersOnQuery()
     {
-        foreach ($this->searchableFields as $searchableField) {
+       Foreach ($this->searchableFields as $searchableField) {
             if (in_array($searchableField['field'], array_keys($this->filters))) {
                 $this->query->where(
                     $searchableField['field'],
@@ -222,7 +222,7 @@ class Repository implements RepositoryInterface
     public function persistPolymorphic(array $relations)
     {
         $result = false;
-        foreach ($relations as $relation) {
+       Foreach ($relations as $relation) {
             $model = $relation['model'];
             $polymorphic = $relation['polymorphic'];
             $result = $model->$polymorphic()->save($this->returnable);
@@ -235,7 +235,7 @@ class Repository implements RepositoryInterface
      */
     public function associate(array $relations)
     {
-        foreach ($relations as $relation) {
+       Foreach ($relations as $relation) {
             $relationship = $relation['name'];
             $this->returnable->$relationship()->associate($relation['model']);
         }

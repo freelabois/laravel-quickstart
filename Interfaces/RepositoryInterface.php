@@ -1,7 +1,7 @@
 <?php
 
 
-namespace  Freelabois\LaravelQuickstart\Interfaces;
+namespace Freelabois\LaravelQuickstart\Interfaces;
 
 interface RepositoryInterface
 {
