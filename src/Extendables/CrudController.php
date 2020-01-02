@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Extendables;
+namespace Freelabois\LaravelQuickstart\Extendables;
 
-use App\Interfaces\ManipulationManagerInterface;
-use App\Interfaces\RepositoryInterface;
+use  Freelabois\LaravelQuickstart\Interfaces\ManipulationManagerInterface;
+use  Freelabois\LaravelQuickstart\Interfaces\RepositoryInterface;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;

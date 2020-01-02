@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Interfaces;
+namespace  Freelabois\LaravelQuickstart\Interfaces;
 
 
 interface ManipulationManagerInterface

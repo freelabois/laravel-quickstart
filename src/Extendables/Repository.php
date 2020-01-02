@@ -1,9 +1,9 @@
 <?php
 
 
-namespace App\Extendables;
+namespace  Freelabois\LaravelQuickstart\Extendables;
 
-use App\Interfaces\RepositoryInterface;
+use  Freelabois\LaravelQuickstart\Interfaces\RepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Builder;
