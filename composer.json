@@ -1,7 +1,7 @@
 {
     "name": "freelabois/laravel-quickstart",
     "description": "Laravel Quickstart",
-    "license": "license",
+    "license": "MIT",
     "authors": [
         {
             "name": "Thiago Traczykowski",
