@@ -29,11 +29,11 @@ class LaravelQuickstartServiceProvider extends ServiceProvider
     */
    public function register()
    {
-      $this->registerGef();
+      $this->registerLaravelQuickstart();
 
    }
 
-   private function registerGef()
+   private function registerLaravelQuickstart()
    {
       $this->app->bind('laravel-quickstart',function($app){
          return new LaravelQuickstart($app);
