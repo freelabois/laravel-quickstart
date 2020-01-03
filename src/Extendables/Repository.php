@@ -86,7 +86,8 @@ class Repository implements RepositoryInterface
                 $this->query->where(
                     $searchableField['field'],
                     $searchableField['operator'] ?? "=",
-                    isset($searchableField['operator']) && $searchableField['operator'] === 'ilike' ? "%" . $this->filters[$searchableField['field']] . "%" : $this->filters[$searchableField['field']]
+                    isset($searchableField['operator']) &&
+                    $searchableField['operator'] === 'ilike' ? "%" . $this->filters[$searchableField['field']] . "%" : $this->filters[$searchableField['field']]
                 );
             }
         }
