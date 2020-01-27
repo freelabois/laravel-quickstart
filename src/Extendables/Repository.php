@@ -148,7 +148,7 @@ class Repository implements RepositoryInterface
      * @param $values
      * @param int|null $id
      * @param array $relations
-     * @return AnonymousResourceCollection|null
+     * @return mixed|null
      */
     public function storeOrUpdate($values, int $id = null, array $relations = [])
     {
