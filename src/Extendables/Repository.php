@@ -52,6 +52,7 @@ class Repository implements RepositoryInterface
         }
         if (!empty($filters)) {
             $this->applyFilters($filters);
+            $this->applyCustonFilters();
             $this->injectFiltersOnQuery();
         }
         $this->order();
@@ -258,4 +259,6 @@ class Repository implements RepositoryInterface
 
         return $this;
     }
+
+   protected function applyCustonFilters(){}
 }
