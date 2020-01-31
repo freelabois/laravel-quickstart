@@ -45,12 +45,12 @@ class Repository implements RepositoryInterface
     */
    public function list(array $filters = [], array $with = [], $pagination = 45)
    {
+      $this->applyFilters($filters);
       $query = $this->newQuery();
       $query->with($with);
       if ($pagination === "false" || $pagination === false) {
          $pagination = 9223372036854775807;
       }
-      $this->applyFilters($filters);
       if (!empty($this->filters)) {
          $this->applyCustonFilters();
          $this->injectFiltersOnQuery();
@@ -91,8 +91,9 @@ class Repository implements RepositoryInterface
    public function injectFiltersOnQuery()
    {
       Foreach ($this->searchableFields as $searchableField) {
-         if (in_array($searchableField['field'], array_keys($this->filters))) {
-            $value = $this->filters[$searchableField['field']];
+         $field = $searchableField['name'] ?? $searchableField['field'] ?? 'null';
+         if (in_array($field, array_keys($this->filters))) {
+            $value = $this->filters[$field];
             switch ($searchableField['operator'] ?? 'default') {
                case 'in':
                   $this->query->whereIn(
