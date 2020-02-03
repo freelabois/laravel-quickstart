@@ -90,7 +90,7 @@ class Repository implements RepositoryInterface
     /**
      * Função para customizar os filtros aplicados na consulta
      */
-    protected function applyCustonFilters()
+    protected function applyCustomFilters()
     {
     }
 
