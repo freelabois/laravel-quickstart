@@ -57,8 +57,8 @@ class Repository implements RepositoryInterface
          $pagination = 9223372036854775807;
       }
       if (!empty($this->filters)) {
-         $this->applyCustonFilters();
-         $this->injectFiltersOnQuery();
+         $this->applyCustomFilters();
+          $this->injectFiltersOnQuery();
       }
       $this->order();
       $this->returnable = $query->paginate($pagination);
