@@ -13,19 +13,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Repository implements RepositoryInterface
 {
-    /**
-     * @var Model
-     */
-    protected $model = null;
-    protected $searchableFields = [];
-    /**
-     * @var JsonResource
-     */
-    protected $presenter = null;
-    protected $returnable = null;
-    /**
-     * @var Builder
-     */
+   /**
+    * @var Model
+    */
+   protected $model = null;
+   protected $searchableFields = [];
+   /**
+    * @var JsonResource
+    */
+   protected $presenter = null;
+   protected $returnable = null;
+   /**
+    * @var Builder
+    */
 
     protected $query = null;
     protected $saved = null;
@@ -33,42 +33,53 @@ class Repository implements RepositoryInterface
      * @var array
      */
     protected $filters;
+
+    /**
+     * @var null|string|string[]
+     */
+    protected $select = null;
     protected $orderBy = null;
     protected $orderByType = null;
     private $polymorphic = false;
 
-    /**
-     * @param array $filters
-     * @param array $with
-     * @param int $pagination
-     * @return AnonymousResourceCollection|null
-     */
-    public function list(array $filters = [], array $with = [], $pagination = 45)
-    {
-        $query = $this->newQuery();
-        $query->with($with);
-        if ($pagination === "false" || $pagination === false) {
-            $pagination = 9223372036854775807;
-        }
-        if (!empty($filters)) {
-            $this->applyFilters($filters);
-            $this->injectFiltersOnQuery();
-        }
-        $this->order();
-        $this->returnable = $query->paginate($pagination);
-        return $this->present(true);
-    }
+   /**
+    * @param array $filters
+    * @param array $with
+    * @param int $pagination
+    * @return AnonymousResourceCollection|null
+    */
+   public function list(array $filters = [], array $with = [], $pagination = 45)
+   {
+      $this->applyFilters($filters);
+      $query = $this->newQuery();
+      $query->with($with);
+      if ($pagination === "false" || $pagination === false) {
+         $pagination = 9223372036854775807;
+      }
+      if (!empty($this->filters)) {
+         $this->applyCustonFilters();
+         $this->injectFiltersOnQuery();
+      }
+      $this->order();
+      $this->returnable = $query->paginate($pagination);
+      return $this->present(true);
+   }
 
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function newQuery()
     {
-        return $this->query = $this->model::query();
+        $this->query = $this->model::query();
+        if (!is_null($this->select)) {
+            $this->query->select($this->select);
+        }
+        return $this->query;
     }
 
     /**
      * @param array $filters
+     * @return Repository
      */
     public function applyFilters(array $filters = [])
     {
@@ -77,21 +88,45 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     *
+     * Função para customizar os filtros aplicados na consulta
      */
-    public function injectFiltersOnQuery()
+    protected function applyCustomFilters()
     {
-       Foreach ($this->searchableFields as $searchableField) {
-            if (in_array($searchableField['field'], array_keys($this->filters))) {
-                $this->query->where(
-                    $searchableField['field'],
-                    $searchableField['operator'] ?? "=",
-                    isset($searchableField['operator']) && $searchableField['operator'] === 'ilike' ? "%" . $this->filters[$searchableField['field']] . "%" : $this->filters[$searchableField['field']]
-                );
-            }
-        }
     }
 
+   /**
+    *
+    */
+   public function injectFiltersOnQuery()
+   {
+      Foreach ($this->searchableFields as $searchableField) {
+         $field = $searchableField['name'] ?? $searchableField['field'] ?? 'null';
+         if (in_array($field, array_keys($this->filters))) {
+            $value = $this->filters[$field];
+            switch ($searchableField['operator'] ?? 'default') {
+               case 'in':
+                  $this->query->whereIn(
+                     $searchableField['field'],
+                     $value
+                  );
+                  break;
+               case 'ilike':
+                  $value = "%" . $value . "%";
+               default:
+                  $this->query->where(
+                     $searchableField['field'],
+                     $searchableField['operator'] ?? "=",
+                     $value
+                  );
+                  break;
+            }
+         }
+      }
+   }
+
+    /**
+     * @return $this
+     */
     protected function order()
     {
         $order = $this->orderBy ?? (new $this->model)->orderBy;
@@ -192,6 +227,10 @@ class Repository implements RepositoryInterface
         return $this->present();
     }
 
+    /**
+     * @param array $relations
+     * @return bool
+     */
     public function persist(array $relations = [])
     {
         if ($this->isPolymorphic()) {
@@ -219,10 +258,14 @@ class Repository implements RepositoryInterface
         $this->polymorphic = $polymorphic;
     }
 
+    /**
+     * @param array $relations
+     * @return bool
+     */
     public function persistPolymorphic(array $relations)
     {
         $result = false;
-       Foreach ($relations as $relation) {
+        Foreach ($relations as $relation) {
             $model = $relation['model'];
             $polymorphic = $relation['polymorphic'];
             $result = $model->$polymorphic()->save($this->returnable);
@@ -235,7 +278,7 @@ class Repository implements RepositoryInterface
      */
     public function associate(array $relations)
     {
-       Foreach ($relations as $relation) {
+        Foreach ($relations as $relation) {
             $relationship = $relation['name'];
             $this->returnable->$relationship()->associate($relation['model']);
         }
@@ -250,6 +293,11 @@ class Repository implements RepositoryInterface
         return $this->model::destroy($id);
     }
 
+    /**
+     * @param null $orderBy
+     * @param null $orderByType
+     * @return $this
+     */
     public function setOrder($orderBy = null, $orderByType = null)
     {
         $this->orderBy = $orderBy;
@@ -257,4 +305,15 @@ class Repository implements RepositoryInterface
 
         return $this;
     }
+
+    /**
+     * @param null|string|string[] $select
+     * @return $this
+     */
+    public function setSelect($select = null)
+    {
+        $this->select = $select;
+        return $this;
+    }
+
 }

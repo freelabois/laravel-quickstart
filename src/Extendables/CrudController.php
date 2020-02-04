@@ -25,6 +25,8 @@ class CrudController extends BaseController
      */
     protected $repository;
 
+    protected $resource = Resource::class;
+
     /**
      * CrudController constructor.
      * @param ManipulationManagerInterface $manager
@@ -49,7 +51,7 @@ class CrudController extends BaseController
     public function index(Request $request)
     {
         $sanitized = $request->all();
-        return $this->repository->list($sanitized);
+        return $this->resource::collection($this->repository->list($sanitized));
     }
 
     /**
@@ -61,7 +63,7 @@ class CrudController extends BaseController
     public function store(Request $request)
     {
         $sanitized = $request->all();
-        return $this->manager->storeOrUpdate($sanitized);
+        return new $this->resource($this->manager->storeOrUpdate($sanitized));
     }
 
     /**
@@ -72,7 +74,7 @@ class CrudController extends BaseController
      */
     public function show($id)
     {
-        return $this->repository->find($id);
+        return new $this->resource($this->repository->find($id));
     }
 
     /**
@@ -85,7 +87,7 @@ class CrudController extends BaseController
     public function update(Request $request, $id)
     {
         $sanitized = $request->all();
-        return $this->manager->storeOrUpdate($sanitized, $id);
+        return new $this->resource($this->manager->storeOrUpdate($sanitized, $id));
     }
 
     /**
