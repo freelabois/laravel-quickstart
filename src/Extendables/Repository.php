@@ -221,11 +221,12 @@ class Repository implements RepositoryInterface
      * @param array $with
      * @return AnonymousResourceCollection|null
      */
-    public function find(int $id, array $with = [])
+    public function find($id, array $with = [])
     {
+        $ids = !is_array($id) ? [$id] : $id;
         $query = $this->newQuery();
         $query->with($with);
-        $this->returnable = $query->findOrFail($id);
+        $this->returnable = $query->findOrFail($ids);
         return $this->present();
     }
 
