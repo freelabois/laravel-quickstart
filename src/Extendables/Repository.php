@@ -13,19 +13,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Repository implements RepositoryInterface
 {
-   /**
-    * @var Model
-    */
-   protected $model = null;
-   protected $searchableFields = [];
-   /**
-    * @var JsonResource
-    */
-   protected $presenter = null;
-   protected $returnable = null;
-   /**
-    * @var Builder
-    */
+    /**
+     * @var Model
+     */
+    protected $model = null;
+    protected $searchableFields = [];
+    /**
+     * @var JsonResource
+     */
+    protected $presenter = null;
+    protected $returnable = null;
+    /**
+     * @var Builder
+     */
 
     protected $query = null;
     protected $saved = null;
@@ -42,28 +42,38 @@ class Repository implements RepositoryInterface
     protected $orderByType = null;
     private $polymorphic = false;
 
-   /**
-    * @param array $filters
-    * @param array $with
-    * @param int $pagination
-    * @return AnonymousResourceCollection|null
-    */
-   public function list(array $filters = [], array $with = [], $pagination = 45)
-   {
-      $this->applyFilters($filters);
-      $query = $this->newQuery();
-      $query->with($with);
-      if ($pagination === "false" || $pagination === false) {
-         $pagination = 9223372036854775807;
-      }
-      if (!empty($this->filters)) {
-         $this->applyCustomFilters();
-          $this->injectFiltersOnQuery();
-      }
-      $this->order();
-      $this->returnable = $query->paginate($pagination);
-      return $this->present(true);
-   }
+    /**
+     * @param array $filters
+     * @param array $with
+     * @param int $pagination
+     * @return AnonymousResourceCollection|null
+     */
+    public function list(array $filters = [], array $with = [], $pagination = 45)
+    {
+        $this->applyFilters($filters);
+        $query = $this->newQuery();
+        $query->with($with);
+        if ($pagination === "false" || $pagination === false) {
+            $pagination = 9223372036854775807;
+        }
+        if (!empty($this->filters)) {
+            $this->applyCustomFilters();
+            $this->injectFiltersOnQuery();
+        }
+        $this->order();
+        $this->returnable = $query->paginate($pagination);
+        return $this->present(true);
+    }
+
+    /**
+     * @param array $filters
+     * @return Repository
+     */
+    public function applyFilters(array $filters = [])
+    {
+        $this->filters = $filters;
+        return $this;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Builder
@@ -78,51 +88,42 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param array $filters
-     * @return Repository
-     */
-    public function applyFilters(array $filters = [])
-    {
-        $this->filters = $filters;
-        return $this;
-    }
-
-    /**
      * Função para customizar os filtros aplicados na consulta
      */
     protected function applyCustomFilters()
     {
     }
 
-   /**
-    *
-    */
-   public function injectFiltersOnQuery()
-   {
-      Foreach ($this->searchableFields as $searchableField) {
-         $field = $searchableField['name'] ?? $searchableField['field'] ?? 'null';
-         if (in_array($field, array_keys($this->filters))) {
-            $value = $this->filters[$field];
-            switch ($searchableField['operator'] ?? 'default') {
-               case 'in':
-                  $this->query->whereIn(
-                     $searchableField['field'],
-                     $value
-                  );
-                  break;
-               case 'ilike':
-                  $value = "%" . $value . "%";
-               default:
-                  $this->query->where(
-                     $searchableField['field'],
-                     $searchableField['operator'] ?? "=",
-                     $value
-                  );
-                  break;
+    /**
+     *
+     */
+    public function injectFiltersOnQuery()
+    {
+        Foreach ($this->searchableFields as $searchableField) {
+            $field = $searchableField['name'] ?? $searchableField['field'] ?? 'null';
+            if (in_array($field, array_keys($this->filters))) {
+                $value = $this->filters[$field];
+                switch ($searchableField['operator'] ?? 'default') {
+                    case 'in':
+                        $this->query->whereIn(
+                            $searchableField['field'],
+                            $value
+                        );
+                        break;
+                    case 'ilike':
+                    case 'like':
+                        $value = "%" . $value . "%";
+                    default:
+                        $this->query->where(
+                            $searchableField['field'],
+                            $searchableField['operator'] ?? "=",
+                            $value
+                        );
+                        break;
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
     /**
      * @return $this
@@ -168,10 +169,11 @@ class Repository implements RepositoryInterface
      */
     public function first(array $filters = [], array $with = [])
     {
+        $this->applyFilters($filters);
         $query = $this->newQuery();
         $query->with($with);
-        if (!empty($filters)) {
-            $this->applyFilters($filters);
+        if (!empty($this->filters)) {
+            $this->applyCustomFilters();
             $this->injectFiltersOnQuery();
         }
         $this->order();
@@ -219,11 +221,12 @@ class Repository implements RepositoryInterface
      * @param array $with
      * @return AnonymousResourceCollection|null
      */
-    public function find(int $id, array $with = [])
+    public function find($id, array $with = [])
     {
+        $ids = !is_array($id) ? [$id] : $id;
         $query = $this->newQuery();
         $query->with($with);
-        $this->returnable = $query->findOrFail($id);
+        $this->returnable = $query->findOrFail($ids);
         return $this->present();
     }
 

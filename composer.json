@@ -1,47 +1,59 @@
 {
-    "name": "freelabois/laravel-quickstart",
-    "description": "Laravel Quickstart",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thiago Traczykowski",
-            "email": "kodguaxinim@gmail.com",
-            "homepage": "https://kodmaster.com.br"
-        }
-    ],
-    "homepage": "https://github.com/freelabois/laravel-quickstart",
-    "keywords": ["Laravel", "laravel-quickstart", "freelabois"],
-    "require": {
-        "php": "^7.3",
-        "guzzlehttp/psr7": "^1.5",
-        "illuminate/broadcasting": "5.7.* || 5.8.* || ^6.0",
-        "illuminate/console": "5.7.* || 5.8.* || ^6.0",
-        "illuminate/http": "5.7.* || 5.8.* || ^6.0",
-        "illuminate/routing": "5.7.* || 5.8.* || ^6.0",
-        "illuminate/support": "5.7.* || 5.8.* || ^6.0",
-        "ext-json": "*"
+  "name": "freelabois/laravel-quickstart",
+  "description": "Laravel Quickstart",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thiago Traczykowski",
+      "email": "kodguaxinim@gmail.com",
+      "homepage": "https://kodmaster.com.br"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^7.0 || ^8.0"
+    {
+      "name": "Pedro Neto",
+      "email": "pedromneto97@gmail.com"
     },
-    "autoload": {
-        "psr-4": {
-            "Freelabois\\LaravelQuickstart\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Freelabois\\LaravelQuickstart\\Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Freelabois\\LaravelQuickstart\\LaravelQuickstartServiceProvider"
-            ],
-            "aliases": {
-                "laravel-quickstart": "Freelabois\\LaravelQuickstart\\Facades\\LaravelQuickstart"
-            }
-        }
+    {
+      "name": "Vitor Kamida",
+      "email": "vitorkamida@gmail.com"
     }
+  ],
+  "homepage": "https://github.com/freelabois/laravel-quickstart",
+  "keywords": [
+    "Laravel",
+    "laravel-quickstart",
+    "freelabois"
+  ],
+  "require": {
+    "php": "^7.3",
+    "guzzlehttp/psr7": "^1.5",
+    "illuminate/broadcasting": "5.7.* || 5.8.* || ^6.0",
+    "illuminate/console": "5.7.* || 5.8.* || ^6.0",
+    "illuminate/http": "5.7.* || 5.8.* || ^6.0",
+    "illuminate/routing": "5.7.* || 5.8.* || ^6.0",
+    "illuminate/support": "5.7.* || 5.8.* || ^6.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0 || ^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Freelabois\\LaravelQuickstart\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Freelabois\\LaravelQuickstart\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Freelabois\\LaravelQuickstart\\LaravelQuickstartServiceProvider"
+      ],
+      "aliases": {
+        "laravel-quickstart": "Freelabois\\LaravelQuickstart\\Facades\\LaravelQuickstart"
+      }
+    }
+  }
 }
