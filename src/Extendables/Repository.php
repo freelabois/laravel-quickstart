@@ -40,6 +40,7 @@ class Repository implements RepositoryInterface
     protected $select = null;
     protected $orderBy = null;
     protected $orderByType = null;
+    protected $groupBy = null;
     private $polymorphic = false;
 
     /**
@@ -60,6 +61,7 @@ class Repository implements RepositoryInterface
             $this->applyCustomFilters();
             $this->injectFiltersOnQuery();
         }
+        $this->group();
         $this->order();
         $this->returnable = $query->paginate($pagination);
         return $this->present(true);
@@ -136,6 +138,17 @@ class Repository implements RepositoryInterface
         }
         return $this;
     }
+    /**
+     * @return $this
+     */
+    protected function group()
+    {
+        $group = $this->groupBy ?? (new $this->model)->groupBy;
+        if (isset($group)) {
+            $this->query->groupBy($group);
+        }
+        return $this;
+    }
 
     /**
      * @param bool $return_empty
@@ -176,6 +189,7 @@ class Repository implements RepositoryInterface
             $this->applyCustomFilters();
             $this->injectFiltersOnQuery();
         }
+        $this->group();
         $this->order();
         $this->returnable = $query->first();
         return $this->present(true);
@@ -325,6 +339,15 @@ class Repository implements RepositoryInterface
         $this->orderBy = $orderBy;
         $this->orderByType = $orderByType;
 
+        return $this;
+    }
+    /**
+     * @param null $groupBy
+     * @return $this
+     */
+    public function setGroup($groupBy = null)
+    {
+        $this->groupBy = $groupBy;
         return $this;
     }
 
