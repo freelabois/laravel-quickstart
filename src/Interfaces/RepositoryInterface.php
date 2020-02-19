@@ -30,4 +30,8 @@ interface RepositoryInterface
 
     public function associate(array $relations);
 
+    public function first(array $filters = [], array $with = []);
+
+    public function firstOrFail(array $filters = [], array $with = []);
+
 }

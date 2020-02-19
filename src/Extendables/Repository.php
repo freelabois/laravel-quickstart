@@ -113,6 +113,7 @@ class Repository implements RepositoryInterface
                     case 'ilike':
                     case 'like':
                         $value = "%" . $value . "%";
+                        break;
                     default:
                         $this->query->where(
                             $searchableField['field'],
@@ -182,10 +183,29 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @param array $filters
+     * @param array $with
+     * @return AnonymousResourceCollection|null
+     */
+    public function firstOrFail(array $filters = [], array $with = [])
+    {
+        $this->applyFilters($filters);
+        $query = $this->newQuery();
+        $query->with($with);
+        if (!empty($this->filters)) {
+            $this->applyCustomFilters();
+            $this->injectFiltersOnQuery();
+        }
+        $this->order();
+        $this->returnable = $query->firstOrFail();
+        return $this->present(true);
+    }
+
+    /**
      * @param $values
      * @param int|null $id
      * @param array $relations
-     * @return AnonymousResourceCollection|null
+     * @return mixed|null
      */
     public function storeOrUpdate($values, int $id = null, array $relations = [])
     {
