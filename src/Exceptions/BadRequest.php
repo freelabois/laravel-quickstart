@@ -4,9 +4,10 @@
 namespace Freelabois\LaravelQuickstart\Exceptions;
 
 
-use Exception;
+use Illuminate\Validation\ValidationException;
 
-class BadRequest extends Exception
+
+class BadRequest extends ValidationException
 {
 
 }

@@ -196,6 +196,25 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @param array $filters
+     * @param array $with
+     * @return AnonymousResourceCollection|null
+     */
+    public function firstOrFail(array $filters = [], array $with = [])
+    {
+        $this->applyFilters($filters);
+        $query = $this->newQuery();
+        $query->with($with);
+        if (!empty($this->filters)) {
+            $this->applyCustomFilters();
+            $this->injectFiltersOnQuery();
+        }
+        $this->order();
+        $this->returnable = $query->firstOrFail();
+        return $this->present(true);
+    }
+
+    /**
      * @param $values
      * @param int|null $id
      * @param array $relations
@@ -205,6 +224,7 @@ class Repository implements RepositoryInterface
     {
         $presenter = $this->presenter;
         $this->setPresenter(null);
+        $this->setSelect();
 
         if ($id) {
             $this->returnable = $this->find($id);
@@ -237,10 +257,9 @@ class Repository implements RepositoryInterface
      */
     public function find($id, array $with = [])
     {
-        $ids = !is_array($id) ? [$id] : $id;
         $query = $this->newQuery();
         $query->with($with);
-        $this->returnable = $query->findOrFail($ids);
+        $this->returnable = $query->findOrFail($id);
         return $this->present();
     }
 
