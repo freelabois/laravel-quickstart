@@ -224,6 +224,7 @@ class Repository implements RepositoryInterface
     {
         $presenter = $this->presenter;
         $this->setPresenter(null);
+        $this->setSelect();
 
         if ($id) {
             $this->returnable = $this->find($id);
