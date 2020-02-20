@@ -108,7 +108,7 @@ class Repository implements RepositoryInterface
                 switch ($searchableField['operator'] ?? 'default') {
                     case 'in':
                         $this->query->whereIn(
-                            $searchableField['field'],
+                            $this->getTableName() . "." . $searchableField['field'],
                             $value
                         );
                         break;
@@ -117,7 +117,7 @@ class Repository implements RepositoryInterface
                         $value = "%" . $value . "%";
                     default:
                         $this->query->where(
-                            $searchableField['field'],
+                            $this->getTableName() . "." . $searchableField['field'],
                             $searchableField['operator'] ?? "=",
                             $value
                         );
@@ -340,6 +340,17 @@ class Repository implements RepositoryInterface
     {
         $this->select = $select;
         return $this;
+    }
+
+
+    /**
+     * Return repository table name
+     *
+     * @return mixed
+     */
+    public function getTableName()
+    {
+        return with(new $this->model)->getTable();
     }
 
 }
