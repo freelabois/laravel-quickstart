@@ -203,7 +203,6 @@ class Repository implements RepositoryInterface
     public function firstOrFail(array $filters = [], array $with = [])
     {
         $this->applyFilters($filters);
-        dump($filters);
         $query = $this->newQuery();
         $query->with($with);
         if (!empty($this->filters)) {
