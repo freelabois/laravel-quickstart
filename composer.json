@@ -24,7 +24,7 @@
     "freelabois"
   ],
   "require": {
-      "php": "^7.4",
+      "php": "^7.2",
       "guzzlehttp/psr7": "^1.5",
       "illuminate/broadcasting": "5.7.* || 5.8.* || ^6.0",
       "illuminate/console": "5.7.* || 5.8.* || ^6.0",
