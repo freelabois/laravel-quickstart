@@ -6,10 +6,6 @@ namespace Freelabois\LaravelQuickstart\Traits;
 
 trait RequestValidator
 {
-    protected array $post_rules = [];
-    protected array $put_rules = [];
-    protected array $default_rules = [];
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -19,12 +15,12 @@ trait RequestValidator
     {
         switch ($this->method()) {
             case 'POST':
-                return $this->post_rules;
+                return optional($this)->post_rules ?? [];
             case 'PUT':
             case 'PATCH':
-                return $this->put_rules;
+            return optional($this)->put_rules ?? [];
             default:
-                return $this->default_rules;
+                return optional($this)->default_rules ?? [];
         }
     }
 }
