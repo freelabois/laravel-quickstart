@@ -4,17 +4,18 @@
 namespace Freelabois\LaravelQuickstart\Traits;
 
 use Freelabois\LaravelQuickstart\Exceptions\BadMethodCall;
+use Freelabois\LaravelQuickstart\Services\ConvertToExcel;
 use Freelabois\LaravelQuickstart\Services\ConvertToPdf;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Storage;
 
 trait ResolveResource
 {
     public static $conversion_types = [
-        'pdf' => ConvertToPdf::class
+        'pdf' => ConvertToPdf::class,
+        'xls' => ConvertToExcel::class
     ];
 
 
@@ -26,7 +27,7 @@ trait ResolveResource
         $export = optional(request())->header('accept');
         $export_type = $export ? explode('/', $export)[1] : null;
         if ($export && in_array($export_type, array_keys(self::$conversion_types))) {
-            $function = 'to'. ucfirst($export_type);
+            $function = 'to' . ucfirst($export_type);
         }
 
         if (method_exists(($this->collects ?? static::class), $function)) {
@@ -44,17 +45,16 @@ trait ResolveResource
         $res = $this->filter((array)$data);
 
         if ($export && in_array($export_type, array_keys(self::$conversion_types))) {
-            $name = 'report_'.now()->format('Ymd_Hisu');
+            $name = 'report_' . now()->format('Ymd_Hisu');
             $converter = App::make(self::$conversion_types[$export_type]);
             //Retornar o arquivo para download
 
-            $converted = $converter->convert($name, $res);
-            $path = 'public/temp/report/'.$name.'.'.$export_type;
-            Storage::drive('local')->put($path, $converted);
-            $res = [
-                'type' => $export_type,
-                'path' => env('APP_URL').'/report/download?dl='. Crypt::encrypt($path)
-            ];
+            $path = 'public/temp/report/' . $name . '.' . $export_type;
+            if ($converter->convert($name, $res, $path))
+                $res = [
+                    'type' => $export_type,
+                    'path' => env('APP_URL') . '/report/download?dl=' . Crypt::encrypt($path)
+                ];
         }
         return $res;
     }

@@ -10,6 +10,6 @@ namespace Freelabois\LaravelQuickstart\Interfaces;
 interface DataConverter
 {
 
-    public function convert($name, $data);
+    public function convert($name, $data, $path);
 
 }

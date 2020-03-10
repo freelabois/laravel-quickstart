@@ -31,6 +31,7 @@
         "illuminate/http": "5.7.* || 5.8.* || ^6.0 || ^7.0",
         "illuminate/routing": "5.7.* || 5.8.* || ^6.0 || ^7.0",
         "illuminate/support": "5.7.* || 5.8.* || ^6.0 || ^7.0",
+        "maatwebsite/excel": "^3.1.0",
         "ext-json": "*"
     },
     "require-dev": {

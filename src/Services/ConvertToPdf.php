@@ -9,11 +9,12 @@ namespace Freelabois\LaravelQuickstart\Services;
 use Freelabois\LaravelQuickstart\Interfaces\DataConverter;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 
 class ConvertToPdf implements DataConverter
 {
 
-    public function convert($name, $data)
+    public function convert($name, $data, $path)
     {
         $data = collect($data);
         if (isset($data['print_type'])) {
@@ -62,9 +63,11 @@ class ConvertToPdf implements DataConverter
             $load['dataTimeEnd'] = Carbon::createFromFormat('Y-m-d H:i:s', $filters['created_at_end'] ?? $filters['date_time_end'])->format('d/m/Y H:i:s');
 
         $pdf->loadView('print.' . ($file ?? 'pdf'), $load);
-        return $pdf
+        $converted = $pdf
             ->setPaper('A4', 'landscape')
             ->download()
             ->getOriginalContent();
+        Storage::drive('local')->put($path, $converted);
+        return true;
     }
 }
