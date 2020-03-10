@@ -47,7 +47,7 @@ class ConvertToPdf implements DataConverter
         }
 
         $filters = request()->all();
-        $pdf = App::make('snappy.pdf.wrapper');
+        $pdf = app()->make('snappy.pdf.wrapper');
         $load = [
             'data' => collect($data),
             'filter' => $filters,

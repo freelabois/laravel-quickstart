@@ -49,10 +49,10 @@ class ManipulationManager implements ManipulationManagerInterface
      * @return mixed
      * @throws ValidationException
      */
-    public function storeOrUpdate($values, int $id = null)
+    public function storeOrUpdate($values, int $id = null, $relations = [])
     {
         $this->validate($values, $id);
-        return $this->persist($values, $id);
+        return $this->persist($values, $id, $relations);
     }
 
     /**
