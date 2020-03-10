@@ -45,7 +45,7 @@ trait ResolveResource
 
         if ($export && in_array($export_type, array_keys(self::$conversion_types))) {
             $name = 'report_'.now()->format('Ymd_Hisu');
-            $converter = App::make(self::$conversion_types[$export_type]);
+            $converter = app()->make(self::$conversion_types[$export_type]);
             //Retornar o arquivo para download
 
             $converted = $converter->convert($name, $res);
