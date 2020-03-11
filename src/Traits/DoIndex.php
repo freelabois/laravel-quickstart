@@ -2,14 +2,10 @@
 
 namespace Freelabois\LaravelQuickstart\Traits;
 
-use Freelabois\LaravelQuickstart\Interfaces\ManipulationManagerInterface;
-use Freelabois\LaravelQuickstart\Interfaces\RepositoryInterface;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller as BaseController;
 
 trait DoIndex
 {
@@ -21,7 +17,9 @@ trait DoIndex
      */
     public function index()
     {
-        $sanitized = request()->all();
-        return $this->resource::collection($this->repository->list($sanitized));
+        $perPage = request()->get('perPage') ?? 45;
+        $with = request()->get('with') ?? [];
+        $sanitized = request()->except(['perPage', 'with']);
+        return $this->resource::collection($this->repository->list($sanitized, $with, $perPage));
     }
 }
