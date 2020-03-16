@@ -34,6 +34,6 @@ interface RepositoryInterface
 
     public function firstOrFail(array $filters = [], array $with = []);
 
-    public function firstOrNew(array $attributes, array $values = []);
+    public function firstOrNew(array $attributes, array $values = [], array $relations = []);
 
 }

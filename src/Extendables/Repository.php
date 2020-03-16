@@ -372,13 +372,13 @@ class Repository implements RepositoryInterface
         return with(new $this->model)->getTable();
     }
 
-    public function firstOrNew(array $attributes, array $values = [])
+    public function firstOrNew(array $attributes, array $values = [], array $relations = [])
     {
         $first = $this->first($attributes);
         if(!empty($first)){
             return $first;
         }
-        return $this->storeOrUpdate($attributes + $values);
+        return $this->storeOrUpdate($attributes + $values, null, $relations);
     }
 
 
