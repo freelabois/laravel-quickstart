@@ -128,24 +128,35 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @return $this
+     * Return repository table name
+     *
+     * @return mixed
      */
-    protected function order()
+    public function getTableName()
     {
-        $order = $this->orderBy ?? (new $this->model)->orderBy;
-        if (isset($order)) {
-            $this->query->orderBy($order, $this->orderByType ?? (new $this->model)->orderByType ?? "asc");
-        }
-        return $this;
+        return with(new $this->model)->getTable();
     }
+
     /**
      * @return $this
      */
-    protected function group()
+    protected function group(): Repository
     {
         $group = $this->groupBy ?? (new $this->model)->groupBy;
         if (isset($group)) {
             $this->query->groupBy($group);
+        }
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function order(): Repository
+    {
+        $order = $this->orderBy ?? (new $this->model)->orderBy;
+        if (isset($order)) {
+            $this->query->orderBy($order, $this->orderByType ?? (new $this->model)->orderByType ?? "asc");
         }
         return $this;
     }
@@ -180,6 +191,66 @@ class Repository implements RepositoryInterface
      * @param array $with
      * @return AnonymousResourceCollection|null
      */
+    public function firstOrFail(array $filters = [], array $with = [])
+    {
+        $this->applyFilters($filters);
+        $query = $this->newQuery();
+        $query->with($with);
+        if (!empty($this->filters)) {
+            $this->applyCustomFilters();
+            $this->injectFiltersOnQuery();
+        }
+        $this->order();
+        $this->returnable = $query->firstOrFail();
+        return $this->present(true);
+    }
+
+    /**
+     * @param int $id
+     * @return int
+     */
+    public function destroy(int $id): int
+    {
+        return $this->model::destroy($id);
+    }
+
+    /**
+     * @param null $orderBy
+     * @param null $orderByType
+     * @return $this
+     */
+    public function setOrder($orderBy = null, $orderByType = null): Repository
+    {
+        $this->orderBy = $orderBy;
+        $this->orderByType = $orderByType;
+
+        return $this;
+    }
+
+    /**
+     * @param null $groupBy
+     * @return $this
+     */
+    public function setGroup($groupBy = null): Repository
+    {
+        $this->groupBy = $groupBy;
+        return $this;
+    }
+
+    public function firstOrNew(array $attributes, array $values = [], array $relations = [])
+    {
+        $first = $this->first($attributes);
+        if (!empty($first)) {
+            return $first;
+        }
+        return $this->storeOrUpdate($attributes + $values, null, $relations);
+    }
+
+    /**
+     * @param array $filters
+     * @param array $with
+     * @return AnonymousResourceCollection|null
+     */
     public function first(array $filters = [], array $with = [])
     {
         $this->applyFilters($filters);
@@ -192,25 +263,6 @@ class Repository implements RepositoryInterface
         $this->group();
         $this->order();
         $this->returnable = $query->first();
-        return $this->present(true);
-    }
-
-    /**
-     * @param array $filters
-     * @param array $with
-     * @return AnonymousResourceCollection|null
-     */
-    public function firstOrFail(array $filters = [], array $with = [])
-    {
-        $this->applyFilters($filters);
-        $query = $this->newQuery();
-        $query->with($with);
-        if (!empty($this->filters)) {
-            $this->applyCustomFilters();
-            $this->injectFiltersOnQuery();
-        }
-        $this->order();
-        $this->returnable = $query->firstOrFail();
         return $this->present(true);
     }
 
@@ -248,6 +300,16 @@ class Repository implements RepositoryInterface
     public function setPresenter($resource = null)
     {
         $this->presenter = $resource;
+    }
+
+    /**
+     * @param null|string|string[] $select
+     * @return $this
+     */
+    public function setSelect($select = null): Repository
+    {
+        $this->select = $select;
+        return $this;
     }
 
     /**
@@ -318,67 +380,6 @@ class Repository implements RepositoryInterface
             $relationship = $relation['name'];
             $this->returnable->$relationship()->associate($relation['model']);
         }
-    }
-
-    /**
-     * @param int $id
-     * @return int
-     */
-    public function destroy(int $id)
-    {
-        return $this->model::destroy($id);
-    }
-
-    /**
-     * @param null $orderBy
-     * @param null $orderByType
-     * @return $this
-     */
-    public function setOrder($orderBy = null, $orderByType = null)
-    {
-        $this->orderBy = $orderBy;
-        $this->orderByType = $orderByType;
-
-        return $this;
-    }
-    /**
-     * @param null $groupBy
-     * @return $this
-     */
-    public function setGroup($groupBy = null)
-    {
-        $this->groupBy = $groupBy;
-        return $this;
-    }
-
-    /**
-     * @param null|string|string[] $select
-     * @return $this
-     */
-    public function setSelect($select = null)
-    {
-        $this->select = $select;
-        return $this;
-    }
-
-
-    /**
-     * Return repository table name
-     *
-     * @return mixed
-     */
-    public function getTableName()
-    {
-        return with(new $this->model)->getTable();
-    }
-
-    public function firstOrNew(array $attributes, array $values = [], array $relations = [])
-    {
-        $first = $this->first($attributes);
-        if(!empty($first)){
-            return $first;
-        }
-        return $this->storeOrUpdate($attributes + $values, null, $relations);
     }
 
 

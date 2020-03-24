@@ -3,6 +3,7 @@
 
 namespace Freelabois\LaravelQuickstart\Extendables;
 
+
 use Freelabois\LaravelQuickstart\Interfaces\ManipulationManagerInterface;
 use Freelabois\LaravelQuickstart\Interfaces\RepositoryInterface;
 use Illuminate\Support\Facades\Validator;
@@ -46,10 +47,10 @@ class ManipulationManager implements ManipulationManagerInterface
     /**
      * @param $values
      * @param int|null $id
+     * @param array $relations
      * @return mixed
-     * @throws ValidationException
      */
-    public function storeOrUpdate($values, int $id = null, $relations = [])
+    public function storeOrUpdate($values, int $id = null, array $relations = [])
     {
         $this->validate($values, $id);
         return $this->persist($values, $id, $relations);

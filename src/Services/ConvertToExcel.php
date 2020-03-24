@@ -9,7 +9,6 @@ namespace Freelabois\LaravelQuickstart\Services;
 use Freelabois\LaravelQuickstart\Exports\ExcelExport;
 use Freelabois\LaravelQuickstart\Interfaces\DataConverter;
 use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\File\File;
 
 class ConvertToExcel implements DataConverter
 {
@@ -22,7 +21,7 @@ class ConvertToExcel implements DataConverter
      */
     public function convert($name, $data, $path)
     {
-        if(count($data) > 0)
+        if (count($data) > 0)
             $items = collect([array_keys($data[0])]);
         $data = collect($data);
         $data = $items->merge($data);

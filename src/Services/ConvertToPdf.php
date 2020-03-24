@@ -6,9 +6,8 @@
 
 namespace Freelabois\LaravelQuickstart\Services;
 
-use Freelabois\LaravelQuickstart\Interfaces\DataConverter;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\App;
+use Freelabois\LaravelQuickstart\Interfaces\DataConverter;
 use Illuminate\Support\Facades\Storage;
 
 class ConvertToPdf implements DataConverter
@@ -40,8 +39,7 @@ class ConvertToPdf implements DataConverter
                 ) {
                     $footers[$footer] = ['totalize' => true, 'type' => $data[0][$footer]['type'] ?? 'default', 'colspan' => $span];
                     $span = 1;
-                }
-                else
+                } else
                     $span++;
             }
         }
