@@ -62,15 +62,13 @@ class ManipulationManager implements ManipulationManagerInterface
      */
     public function validate($values, int $id = null)
     {
-        if (!empty($this->validation[self::CREATE]) || !empty($this->validation[self::EDIT])) {
-            $validator = Validator::make(
+        $validator = Validator::make(
                 $values,
-                $id ? $this->validation[self::EDIT] : $this->validation[self::CREATE],
-                $id ? $this->validation[self::EDIT_MESSAGE] : $this->validation[self::CREATE_MESSAGE]
+                ($id ? $this->validation[self::EDIT] : $this->validation[self::CREATE]) ?? [],
+                ($id ? $this->validation[self::EDIT_MESSAGE] : $this->validation[self::CREATE_MESSAGE]) ?? []
             );
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
         }
     }
 
