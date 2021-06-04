@@ -68,6 +68,21 @@ class Repository implements RepositoryInterface
         return $this->present(true);
     }
 
+    public function dd(array $filters = [], array $with = [], $pagination = false)
+    {
+        $this->applyFilters($filters);
+        $query = $this->newQuery();
+        $query->with($with);
+        if (!empty($this->filters)) {
+            dump($this->filters);
+            $this->applyCustomFilters();
+            $this->injectFiltersOnQuery();
+        }
+        $this->group();
+        $this->order();
+        $query->dd();
+    }
+
     /**
      * @param array $filters
      * @return Repository
