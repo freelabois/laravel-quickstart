@@ -4,17 +4,17 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Thiago Traczykowski",
             "email": "kodguaxinim@gmail.com",
-            "homepage": "https://kodmaster.com.br"
+            "homepage": "https://kodmaster.com.br",
+            "name": "Thiago Traczykowski"
         },
         {
-            "name": "Pedro Neto",
-            "email": "pedromneto97@gmail.com"
+            "email": "pedromneto97@gmail.com",
+            "name": "Pedro Neto"
         },
         {
-            "name": "Vitor Kamida",
-            "email": "vitorkamida@gmail.com"
+            "email": "vitorkamida@gmail.com",
+            "name": "Vitor Kamida"
         }
     ],
     "homepage": "https://github.com/freelabois/laravel-quickstart",
@@ -24,15 +24,15 @@
         "freelabois"
     ],
     "require": {
-        "php": "^7.2",
+        "ext-json": "*",
         "guzzlehttp/psr7": "^1.5",
-        "illuminate/broadcasting": "5.7.* || 5.8.* || ^6.0 || ^7.0",
-        "illuminate/console": "5.7.* || 5.8.* || ^6.0 || ^7.0",
-        "illuminate/http": "5.7.* || 5.8.* || ^6.0 || ^7.0",
-        "illuminate/routing": "5.7.* || 5.8.* || ^6.0 || ^7.0",
-        "illuminate/support": "5.7.* || 5.8.* || ^6.0 || ^7.0",
+        "illuminate/broadcasting": "5.7.* || 5.8.* || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/console": "5.7.* || 5.8.* || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/http": "5.7.* || 5.8.* || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/routing": "5.7.* || 5.8.* || ^6.0 || ^7.0 || ^8.0",
+        "illuminate/support": "5.7.* || 5.8.* || ^6.0 || ^7.0 || ^8.0",
         "maatwebsite/excel": "^3.1.0",
-        "ext-json": "*"
+        "php": "^7.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0 || ^8.0 || ^8.5.0"

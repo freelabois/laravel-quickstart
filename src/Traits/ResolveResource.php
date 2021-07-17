@@ -10,6 +10,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Crypt;
+use JsonSerializable;
 
 trait ResolveResource
 {
@@ -38,7 +39,7 @@ trait ResolveResource
 
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
-        } elseif ($data instanceof \JsonSerializable) {
+        } elseif ($data instanceof JsonSerializable) {
             $data = $data->jsonSerialize();
         }
 
