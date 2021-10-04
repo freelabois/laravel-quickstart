@@ -51,7 +51,6 @@ class Repository implements RepositoryInterface
      */
     public function list(array $filters = [], array $with = [], $pagination = 45)
     {
-        dd('oi');
         $this->applyFilters($filters);
         $query = $this->newQuery();
         $query->with($with);
