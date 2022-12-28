@@ -22,7 +22,7 @@ class ConvertToExcel implements DataConverter
     public function convert($name, $data, $path)
     {
         if (count($data) > 0)
-            $items = collect([array_keys((array) $data[0])]);
+            $items = collect([array_keys((array) $data[0])] ?? [array_keys((array) $data[0][0])]);
         $data = collect($data);
         $data = $items->merge($data);
         return Excel::store(new ExcelExport($data), $path, 'local');
